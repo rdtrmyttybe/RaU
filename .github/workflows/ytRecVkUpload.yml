@@ -7,7 +7,7 @@ on:
         
 jobs:
   live_stream:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -16,8 +16,8 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 14.16.0
-      - uses: actions/setup-go@v2
-      - run: go install 'github.com/Kethsar/ytarchive@master'
+#       - uses: actions/setup-go@v2
+#       - run: go install 'github.com/Kethsar/ytarchive@master'
       - run: ytarchive --wait -r 180 -o 'videos/%(title)s [%(id)s] [%(channel_id)s]' --debug -c cookies.txt --add-metadata --threads 8 --save --t --mkv '${{ github.event.inputs.youtube_id }}' 720p/720p60
       - run: npm install
       - run: |
