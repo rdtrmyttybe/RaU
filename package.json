@@ -1,15 +1,19 @@
 {
-  "name": "nodejstest",
+  "name": "vkuploadvideosfromfolder",
   "version": "1.0.0",
   "description": "",
-  "main": "ffmpeg.js",
-  "dependencies": {
-    "child_process": "^1.0.2"
-  },
-  "devDependencies": {},
+  "main": "main.js",
   "scripts": {
-    "start": "node ffmpeg.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "fetch": "^1.1.0",
+    "ffmpeg-probe": "^1.0.6",
+    "fs": "0.0.1-security",
+    "node-fetch": "^3.1.0",
+    "request": "^2.88.2"
+  }
 }
