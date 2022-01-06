@@ -74,8 +74,9 @@ function getUploadURL(file) {
                             getUploadURL(arr[index++])
                         } else {
                             console.info('[Информация] - Все файлы из папки загружены.');
+                            console.info('[Информация] - Завершение работы...');
                         }
-                        move(file);
+//                         move(file);
                     } else {
                         console.error('[Ошибка!] - Код: ' + code);
                     }
