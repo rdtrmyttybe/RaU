@@ -1,0 +1,15 @@
+{
+  "name": "nodejstest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "ffmpeg.js",
+  "dependencies": {
+    "child_process": "^1.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node ffmpeg.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
