@@ -19,7 +19,7 @@ jobs:
 #       - uses: actions/setup-go@v2
 #       - run: go install 'github.com/Kethsar/ytarchive@master'
       - run: dir
-      - run: ytarchive.exe --wait -r 180 -o 'videos/%(title)s [%(id)s] [%(channel_id)s]' --debug -c cookies.txt --add-metadata --threads 8 --save --t --mkv '${{ github.event.inputs.youtube_id }}' 720p/720p60
+      - run: ./ytarchive.exe --wait -r 180 -o 'videos/%(title)s [%(id)s] [%(channel_id)s]' --debug -c cookies.txt --add-metadata --threads 8 --save --t --mkv '${{ github.event.inputs.youtube_id }}' 720p/720p60
       - run: npm install
       - run: |
           node main.js
