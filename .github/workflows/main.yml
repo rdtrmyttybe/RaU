@@ -1,4 +1,4 @@
-name: Live Stream
+name: Download Video and Upload to VK
 on:
   workflow_dispatch:
     inputs:
