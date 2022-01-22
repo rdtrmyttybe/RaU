@@ -3,7 +3,6 @@ const fs = require('fs'),
     { formatBytes } = require('./convertBytes'),
     group = '202409472',
     token = 'c3b31136dcaa390c63aaf21d79aad83792858504dc18c545a657a4a873450c68bef191210280b07e6b5c8',
-    album = "13",
     description = '',
     folder = "videos/";
 
@@ -39,6 +38,34 @@ fs.readdir(folder, function () {
 
 // ---------------------------------------------------------------- 
 function getUploadURL(file) {
+    switch (file.match(/[^[\]]+(?=])/g)[1]) {
+        /*           Vjlink             */
+        case "UCOrraQ1wIEdkHCtZq3zH2oA":
+        case "UCNcuCP5IAI6My3e5Z-vKkBQ":
+            album = "12";
+            break;
+        /*          Щадилдо             */
+        case "UC0hPfK3y7jrTuCqyxAYRy2Q":
+        case "UCKaO5Kvxpx6xqNWJN5HGJww":
+        case "UC-QG1Q_C3UnyqPsdWxPoKyg":
+        case "UCp0kr5gFfRlekGAvQ6Bw14w":
+        case "UC4CH6vB9sZ4xg71XVIOXZOw":
+        case "UCXugNh7Ec66p_iYBQPfWd9Q":
+        case "UCwAWTzNpCh_Qxap6z9fNlig":
+        case "UCs2qH-ylrM2lm6bMHG5nsUw":
+        case "UCXdyP8qQf26lsADsGp-itjw":
+            album = "13";
+            break;
+        /*     Валентин Владимирович     */
+        case "UCrEufIi5_5Yn0rk3BrbrFDQ":
+        case "UCslZVm-WgC0KpEgdxiHk9Ng":
+            album = "2";
+            break;
+        default:
+            album = "";
+            break;
+    };
+
     var options = {
         method: 'GET',
         url: `https://api.vk.com/method/video.save?group_id=${group}` +
@@ -107,7 +134,7 @@ function getUploadURL(file) {
                 let percent = dispatched * 100 / size;
                 process.stdout.write('\033c');
                 console.log(data);
-                console.log('Загружено: ' + formatBytes(dispatched) + ' из ' + formatBytes(size) + ' это ' + percent.toFixed(2) + '%')
+                console.log('Загружено на сервер ' + formatBytes(dispatched) + ' из ' + formatBytes(size) + " это " + percent.toFixed(2) + "%")
             }, 1000);
             // ---------------------------------------------------------------- 
         } else {
