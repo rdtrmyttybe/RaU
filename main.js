@@ -23,11 +23,11 @@ fs.readdir(folder, function () {
             time: fs.statSync(folder + '/' + fileName).mtime.getTime()
         };
     }).sort(function (a, b) {
-        return b.time - a.time;
+        return a.time - b.time;
     }).map(function (v) {
         return v.name;
     });
-    // 
+
     if (index < arr.length) {
         console.debug(arr);
         getUploadURL(arr[index++]);
@@ -127,14 +127,16 @@ function getUploadURL(file) {
                 };
             })
 
-
+            let dispatchedOld = 0;
             let size = fs.lstatSync(folder + "/" + file).size;
             var q = setInterval(function () {
                 var dispatched = r.req.connection._bytesDispatched;
+                speed = dispatched - dispatchedOld;
                 let percent = dispatched * 100 / size;
                 process.stdout.write('\033c');
                 console.log(data);
-                console.log('Загружено на сервер ' + formatBytes(dispatched) + ' из ' + formatBytes(size) + " это " + percent.toFixed(2) + "%")
+                console.log('Загружено на сервер ' + formatBytes(dispatched) + ' из ' + formatBytes(size) + " cо скоростью: " + formatBytes(speed) + "/сек." + "\nГотово: " + percent.toFixed(2) + "%")
+                dispatchedOld = dispatched;
             }, 1000);
             // ---------------------------------------------------------------- 
         } else {
