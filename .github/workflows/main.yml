@@ -14,7 +14,7 @@ jobs:
       - uses: AnimMouse/setup-yt-dlp@v1
       - uses: FedericoCarboni/setup-ffmpeg@v1
       - run: | 
-         yt-dlp '${{ github.event.inputs.youtube_id }}' -P './videos' -o '%(title)s [%(id)s] [%(channel_id)s].%(ext)s'
+         yt-dlp '${{ github.event.inputs.youtube_id }}' -P './videos' -o '%(title)s [%(id)s] [%(channel_id)s].%(ext)s' --cookies cookies.txt -f 'bestvideo[height=720][ext=mp4]+bestaudio[ext=m4a]' --live-from-start --concurrent-fragments 8
       - uses: actions/setup-node@v2
         with:
           node-version: 14.16.0
