@@ -16,7 +16,7 @@ jobs:
       - run: |
          sudo apt install aria2 -y
       - run: | 
-         yt-dlp -f '((bv*[fps>30]/bv*)[height<=720]/(wv*[fps>30]/wv*)) + ba / (b[fps>30]/b)[height<=720]/(w[fps>30]/w)[protocol!*=dash]' --merge-output-format mkv -P './videos' -o '%(title)s [%(id)s] [%(channel_id)s].%(ext)s' --external-downloader=aria2 --external-downloader-args '-j 16 -x 16 -s 16 -k 1M' --no-warnings --progress --throttled-rate 100K '${{ github.event.inputs.youtube_id }}'
+         yt-dlp -f '((bv*[fps>30]/bv*)[height<=720]/(wv*[fps>30]/wv*)) + ba / (b[fps>30]/b)[height<=720]/(w[fps>30]/w)[protocol!*=dash]' --merge-output-format mkv -P './videos' -o '%(title)s [%(id)s] [%(channel_id)s].%(ext)s' --external-downloader=aria2c --external-downloader-args '-j 16 -x 16 -s 16 -k 1M' --no-warnings --progress --throttled-rate 100K '${{ github.event.inputs.youtube_id }}'
       - uses: actions/setup-node@v2
         with:
           node-version: 14.16.0
