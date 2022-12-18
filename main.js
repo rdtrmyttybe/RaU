@@ -1,10 +1,11 @@
 const fs = require('fs'),
     request = require('request'),
     { formatBytes } = require('./convertBytes'),
-    group = '202409472',
+    group = "202409472",
     token = 'c3b31136dcaa390c63aaf21d79aad83792858504dc18c545a657a4a873450c68bef191210280b07e6b5c8',
-    description = '',
-    folder = "videos/";
+    folder = "videos/",
+    ProgressBarFormatter = require('progress-bar-formatter');
+
 
 
 // ----------------------------------------------------------------
@@ -38,7 +39,14 @@ fs.readdir(folder, function () {
 
 // ---------------------------------------------------------------- 
 function getUploadURL(file) {
-    switch (file.match(/[^[\]]+(?=])/g)[1]) {
+    fileSwitchData = "";
+    description = "";
+
+    if (Array.isArray(file.match(/[^[\]]+(?=])/g))) {
+        fileSwitchData = file.match(/[^[\]]+(?=])/g)[1];
+        description = "https://youtu.be/" + file.match(/[^[\]]+(?=])/g)[0] + "\nhttps://youtube.com/channel/" + file.match(/[^[\]]+(?=])/g)[1];
+    }
+    switch (fileSwitchData) {
         /*           Vjlink             */
         case "UCOrraQ1wIEdkHCtZq3zH2oA":
         case "UCNcuCP5IAI6My3e5Z-vKkBQ":
@@ -53,6 +61,7 @@ function getUploadURL(file) {
         case "UCXugNh7Ec66p_iYBQPfWd9Q":
         case "UCwAWTzNpCh_Qxap6z9fNlig":
         case "UCs2qH-ylrM2lm6bMHG5nsUw":
+        case "UCErYNylQlYYX3piVQocJlWQ":
         case "UCXdyP8qQf26lsADsGp-itjw":
             album = "13";
             break;
@@ -60,6 +69,10 @@ function getUploadURL(file) {
         case "UCrEufIi5_5Yn0rk3BrbrFDQ":
         case "UCslZVm-WgC0KpEgdxiHk9Ng":
             album = "2";
+            break;
+        /*       Андеграунд Ютуб         */
+        case "UCqIyBmqBzJGaOUu-WnxroLw":
+            album = "21";
             break;
         default:
             album = "";
@@ -72,10 +85,10 @@ function getUploadURL(file) {
             `&album_id=${album}` +
             `&name=${encodeURIComponent(file.split('.').reverse().slice(1).reverse().join('.'))}` +
             `&description=${description}` +
-            `&privacy_view=2` +
+            `&privacy_view=0` +
             `&access_token=${token}` +
-            `&v=5.80`,
-    };
+            `&v=5.131`,
+    }; // 0 доступно участникам сообщества
     request(options, (error, response, body) => {
         if (!error) {
             var data = JSON.parse(body);
@@ -99,26 +112,14 @@ function getUploadURL(file) {
                     console.debug('Body: ');
                     console.debug(JSON.parse(body));
                     clearInterval(q);
-                    // var options = {
-                    //     method: 'GET',
-                    //     url: `https://api.vk.com/method/video.edit?owner_id=${group}` +
-                    //         `&video_id=${album}` +
-                    //         `&name=${encodeURIComponent(file.split('.').reverse().slice(1).reverse().join('.'))}` +
-                    //         `&description=${description}` +
-                    //         `&privacy_view=2` +
-                    //         `&access_token=${token}` +
-                    //         `&v=5.80`,
-                    // };
-                    // request(options, (error, response, body) => {
 
-                    // })
                     if (code === 200) {
                         if (index < arr.length) {
                             getUploadURL(arr[index++])
                         } else {
                             console.info('[Информация] - Все файлы из папки загружены.');
                         }
-//                         move(file);
+                        move(file); // Перемещение после загрузки в папку Loaded
                     } else {
                         console.error('[Ошибка!] - Код: ' + code);
                     }
@@ -127,15 +128,31 @@ function getUploadURL(file) {
                 };
             })
 
+
+
+
             let dispatchedOld = 0;
             let size = fs.lstatSync(folder + "/" + file).size;
             var q = setInterval(function () {
                 var dispatched = r.req.connection._bytesDispatched;
                 speed = dispatched - dispatchedOld;
                 let percent = dispatched * 100 / size;
+
+
+                var bar = new ProgressBarFormatter({
+                    length: 110,
+                    complete: '▪',
+                    incomplete: '▫'
+                });
+
                 process.stdout.write('\033c');
                 console.log(data);
-                console.log('Загружено на сервер ' + formatBytes(dispatched) + ' из ' + formatBytes(size) + " cо скоростью: " + formatBytes(speed) + "/сек." + "\nГотово: " + percent.toFixed(2) + "%")
+                console.log("Файл - " + index + " из " + arr.length);
+                console.log("[" + formatBytes(dispatched) + ' / ' + formatBytes(size) + "] - [" + formatBytes(speed) + "/сек.] ");
+                process.title =
+                    "Файл - " + index + " из " + arr.length + " [" + formatBytes(dispatched) + ' / ' + formatBytes(size) + "] - [" + formatBytes(speed) + "/сек.] - [" + percent.toFixed(2) + " %]";
+                console.log("[" + bar.format((percent / 100).toFixed(2)) + "] [" + percent.toFixed(2) + " %]");
+
                 dispatchedOld = dispatched;
             }, 1000);
             // ---------------------------------------------------------------- 
