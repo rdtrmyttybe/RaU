@@ -119,7 +119,7 @@ function getUploadURL(file) {
                         } else {
                             console.info('[Информация] - Все файлы из папки загружены.');
                         }
-                        move(file); // Перемещение после загрузки в папку Loaded
+//                         move(file); // Перемещение после загрузки в папку Loaded
                     } else {
                         console.error('[Ошибка!] - Код: ' + code);
                     }
